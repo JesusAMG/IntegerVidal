@@ -16,7 +16,7 @@ export default function Home() {
         <nav className="flex gap-8">
           <Link href="/buscar" className="hover:text-gray-300 text-lg">Buscar Casa</Link>
           <Link href="/publicar" className="hover:text-gray-300 text-lg">Publicar</Link>
-          <Link href="/publicaciones" className="hover:text-gray-300 text-lg">Ver publicaciones</Link>
+          <Link href="/mispublicaciones" className="hover:text-gray-300 text-lg">Ver publicaciones</Link>
         </nav>
         {/* Icono de iniciar sesión */}
         <div className="flex items-center gap-2">
