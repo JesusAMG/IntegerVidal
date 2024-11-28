@@ -3,16 +3,28 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { auth } from '../utils/firestore'; // Asegúrate de que `auth` esté correctamente configurado
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
+    setError(null);
+
+    try {
+      // Autenticar usuario con Firebase Authentication
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log('Inicio de sesión exitoso');
+      router.push('/home');
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error.message);
+      setError('Correo o contraseña incorrectos.');
+    }
   };
 
   const handleCreateAccount = () => {
@@ -32,7 +44,7 @@ export default function Login() {
           <h1 className="text-2xl font-semibold font-serif hover:text-[#D3D2BB]">Inicio</h1>
         </div>
       </header>
-      {/* Main Content */}
+      {/* Main */}
       <main className="flex flex-col lg:flex-row items-center justify-center gap-8 p-8 w-full max-w-7xl bg-[#D3D2BB] rounded-lg shadow-md">
         {/* Left Section */}
         <div className="w-full lg:w-1/2 flex flex-col items-start">
@@ -50,13 +62,14 @@ export default function Login() {
             className="mt-4 rounded-lg"
           />
         </div>
-        {/* Right Section */}
+        {/* Login Form */}
         <div className="w-full lg:w-1/2 bg-[#F2F1E6] p-8 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold text-[#54615A] font-serif text-center mb-6">
             Iniciar Sesión
           </h2>
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email */}
+            {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-[#54615A] font-medium font-serif">
                 Email
@@ -71,7 +84,7 @@ export default function Login() {
                 required
               />
             </div>
-            {/* Password */}
+            {/* Password Field */}
             <div>
               <label htmlFor="password" className="block text-[#54615A] font-medium font-serif">
                 Contraseña
